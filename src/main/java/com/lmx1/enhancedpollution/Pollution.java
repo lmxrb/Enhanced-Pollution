@@ -1,5 +1,7 @@
 package com.lmx1.enhancedpollution;
 
+
+import com.lmx1.enhancedpollution.Items.PollutionMeasureItem;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -16,7 +18,13 @@ public class Pollution
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event){
-        
+        GameRegistry.registerItem(new PollutionMeasureItem(), "pollution_measurer");
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event)
+    {
+        MinecraftForge.EVENT_BUS.register(new MyEventHandler());
     }
 
 }

@@ -1,7 +1,9 @@
 package com.lmx1.enhancedpollution;
 
-
+import com.lmx1.enhancedpollution.Blocks.ModBlocks;
+import com.lmx1.enhancedpollution.Handlers.MyEventHandler;
 import com.lmx1.enhancedpollution.Items.PollutionMeasureItem;
+import com.lmx1.enhancedpollution.render.FanRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -18,7 +20,10 @@ public class Pollution
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event){
+        GameRegistry.registerBlock(ModBlocks.filterBlock, "mob_repeller");
+        GameRegistry.registerTileEntity(ModBlocks.filterTile.getClass(),"enhancedpollution:mob_repeller");
         GameRegistry.registerItem(new PollutionMeasureItem(), "pollution_measurer");
+        ClientRegistry.bindTileEntitySpecialRenderer(ModBlocks.filterTile.getClass(), new FanRenderer());
     }
 
     @EventHandler

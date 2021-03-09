@@ -6,7 +6,10 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TileUtils {
 
+    //public List<TileEntity> masters = new ArrayList<TileEntity>();
+
     public static float getPollution(TileEntity tile){
+        //System.out.println(tile.getClass().getName());
         if(tile instanceof TileEntityFurnace){
             return ((TileEntityFurnace) tile).isBurning() ? 50f : 0.0f;
         }

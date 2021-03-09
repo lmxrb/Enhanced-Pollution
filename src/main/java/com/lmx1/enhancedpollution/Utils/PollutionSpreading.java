@@ -23,6 +23,7 @@ public class PollutionSpreading {
     }
 
     private static void nearby(Chunk chunk, float pollution){
+        //Refactor
         Chunk chunk1 = world.getChunkFromChunkCoords(chunk.xPosition - 1, chunk.zPosition);
         chunks.put(chunk1, ChunkHandler.getPollution(chunk1));
         chunk1 = world.getChunkFromChunkCoords(chunk.xPosition + 1, chunk.zPosition);

@@ -8,6 +8,8 @@ public class TileUtils {
 
     //public List<TileEntity> masters = new ArrayList<TileEntity>();
 
+
+    //Returns amount of pollution that Tile produces
     public static float getPollution(TileEntity tile){
         //System.out.println(tile.getClass().getName());
         if(tile instanceof TileEntityFurnace){

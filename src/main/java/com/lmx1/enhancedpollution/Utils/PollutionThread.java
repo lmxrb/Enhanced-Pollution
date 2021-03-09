@@ -1,14 +1,10 @@
 package com.lmx1.enhancedpollution.Utils;
 
 import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
-import com.lmx1.enhancedpollution.Handlers.MyEventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PollutionThread extends Thread {
 
@@ -22,7 +18,7 @@ public class PollutionThread extends Thread {
         this.world = w;
         this.setDaemon(true);
         this.setPriority(3);
-        regularFog(world.getWorldTime());
+        //regularFog(world.getWorldTime());
         handler = SavedData.getHandler(world);
         //UPDATE INFO
     }
@@ -40,6 +36,7 @@ public class PollutionThread extends Thread {
                     //e.printStackTrace();
                 }
                 processTiles();
+                /*
                 t++;
                 if(t == 2){
                     t = 0;
@@ -47,17 +44,18 @@ public class PollutionThread extends Thread {
                     if(!ChunkHandler.chunkStorage.isEmpty()) {
                         PollutionSpreading.spreadPollution(world);
                     }
-                }
+                }*/
             }
         }
         interrupt();
     }
 
-    void processTiles(){
+    //Function that checks for polluting tiles (and changes pollution accordingly)
+    private void processTiles(){
         for(Object obj : world.loadedTileEntityList){
             TileEntity tile = (TileEntity) obj;
             float pollution = TileUtils.getPollution(tile);
-            if(pollution > 0) {
+            if(pollution >= 0) {
                 Chunk tileChunk = tile.getWorldObj().getChunkFromBlockCoords(tile.xCoord, tile.zCoord);
                 ChunkHandler.changePollution(tileChunk, pollution);
                 //System.out.println("Pollution of this chunk: " + ChunkHandler.chunkStorage.get(tileChunk));
@@ -66,7 +64,8 @@ public class PollutionThread extends Thread {
         //TileUtils.clearTileCache();
     }
 
-    void processFog(float r, float g, float b, float d){
+    //TODO: Add pollution based fog
+    /*void processFog(float r, float g, float b, float d){
         List<Float> fog = new ArrayList<Float>();
         fog.add(r);
         fog.add(g);
@@ -81,6 +80,6 @@ public class PollutionThread extends Thread {
         } else {
             processFog(75, 89, 110, 0.001f);
         }
-    }
+    }*/
 
 }

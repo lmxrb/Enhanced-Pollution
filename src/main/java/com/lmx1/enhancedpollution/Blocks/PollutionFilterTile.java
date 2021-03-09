@@ -7,14 +7,16 @@ import net.minecraft.world.chunk.Chunk;
 public class PollutionFilterTile extends TileEntity  {
 
     private int ticks;
-    public final float filteringCapacity = -5f;
+    //TODO: Add custom filters and passive/active filtering (fans)
+    public final float filteringCapacity = -125f;
 
-    //add a should update because of blacklisted dimensions
+    //should update because of blacklisted dimensions
 
     @Override
     public void updateEntity() {
         if(!worldObj.isRemote){
             ticks++;
+            //Every 2 seconds captures pollution
             if(ticks >= 40) {
                 ticks = 0;
                 capturePollution();
@@ -25,6 +27,8 @@ public class PollutionFilterTile extends TileEntity  {
 
     public void capturePollution(){
         Chunk chunk = this.worldObj.getChunkFromBlockCoords(this.xCoord,this.zCoord);
+        //If filtering capacity is bigger than chunk's pollution sets the chunks pollution to 0
+        //since it can't be negative
         if (ChunkHandler.getPollution(chunk) <= -filteringCapacity) {
             ChunkHandler.deletePollution(chunk);
         } else {

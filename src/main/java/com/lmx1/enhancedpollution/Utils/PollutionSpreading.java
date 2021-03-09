@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 public class PollutionSpreading {
 
+    //TODO: Fix pollution spreading
+
     private static HashMap<Chunk, Float> chunks = new HashMap<>();
     private static World world;
     private static float nearbyPollution = 0;
@@ -22,6 +24,7 @@ public class PollutionSpreading {
         ChunkHandler.changePollution(chunk, (1 - p/nearbyPollution) * spread);
     }
 
+    //Spreads pollution to adjacent chunks
     private static void nearby(Chunk chunk, float pollution){
         //Refactor
         Chunk chunk1 = world.getChunkFromChunkCoords(chunk.xPosition - 1, chunk.zPosition);
@@ -33,7 +36,7 @@ public class PollutionSpreading {
         chunk1 = world.getChunkFromChunkCoords(chunk.xPosition, chunk.zPosition + 1);
         chunks.put(chunk1, ChunkHandler.getPollution(chunk1));
         chunks.forEach((c, p) -> getPol(c, pollution, p));
-        spread = (float) 0.2*chunks.size()*pollution - nearbyPollution/chunks.size()+1;
+        spread = (float) 0.2 * chunks.size()*pollution - nearbyPollution/chunks.size() + 1;
         chunks.forEach(PollutionSpreading::spreading);
         ChunkHandler.changePollution(chunk, pollution - spread);
         nearbyPollution = 0;

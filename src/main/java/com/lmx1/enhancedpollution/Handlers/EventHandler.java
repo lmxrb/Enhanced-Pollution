@@ -14,10 +14,11 @@ import net.minecraftforge.event.world.WorldEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyEventHandler {
+public class EventHandler {
 
     public static List<Thread> threads = new ArrayList<Thread>();
-    public static List<Float> fog = new ArrayList<Float>();
+
+    /*public static List<Float> fog = new ArrayList<Float>();
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -37,11 +38,13 @@ public class MyEventHandler {
     public void fogDensity(EntityViewRenderEvent.FogDensity event) {
         event.density = fog.get(3);
         event.setCanceled(true);
-    }
+    }*/
 
+    //When world loads creates a new Pollution Thread
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event)
     {
+        //Make sure it only runs on server side
         if(event.world.getClass() == WorldServer.class) {
             if(!threads.isEmpty()){
                 return;
@@ -54,6 +57,7 @@ public class MyEventHandler {
         }
     }
 
+    //Stop threads when world unloads
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event){
         if(!event.world.isRemote){
@@ -64,7 +68,7 @@ public class MyEventHandler {
         }
     }
 
-
+    //Save data to chunks
     @SubscribeEvent
     public void onChunkSaveEvent(ChunkDataEvent.Save event)
     {

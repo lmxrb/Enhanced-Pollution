@@ -20,9 +20,10 @@ public class PollutionMeasureItem extends Item {
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int dim, float hitX, float hitY, float hitZ){
+        //Run only on server side
         if(!world.isRemote) {
-        	//Retrieve pollution value
-            float pollution = 0.0;
+            //Gets amount of pollution and prints it to chat
+            float pollution = ChunkHandler.getPollution(world.getChunkFromBlockCoords(x, z));
             player.addChatMessage(new ChatComponentTranslation("Chunk's pollution: " + String.format("%.3f", pollution)));
         }
         return true;

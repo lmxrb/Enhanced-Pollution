@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.0"
-group= "com.lmx1.enhancedpollution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.lmx1.enhancedpollution"
 archivesBaseName = "enhancedpollution"
 
 apply plugin: 'java'

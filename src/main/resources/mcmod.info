@@ -1,16 +1,16 @@
 [
-{
-  "modid": "enhancedpollution",
-  "name": "Enhanced Pollution",
-  "description": "Adds a pollution system.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["LMX1"],
-  "credits": "LMX1",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "enhancedpollution",
+    "name": "Enhanced Pollution",
+    "description": "Adds a pollution system.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["LMX1"],
+    "credits": "LMX1",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]

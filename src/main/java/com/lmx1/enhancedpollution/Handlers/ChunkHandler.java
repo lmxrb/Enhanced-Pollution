@@ -27,10 +27,16 @@ public class ChunkHandler {
         return data;
     }
 
+    //Changes chunk pollution
     public static void changePollution(Chunk chunk, float newPollution){
-        float pollution = chunkStorage.get(chunk) + newPollution;
-        //newPollutedChunk(chunk, pollution);
-        chunkStorage.replace(chunk, pollution);
+        if(!chunkStorage.containsKey(chunk)){
+            chunkStorage.put(chunk, newPollution);
+        }
+        else{
+            float pollution = chunkStorage.get(chunk) + newPollution;
+            newPollutedChunk(chunk, pollution);
+            chunkStorage.replace(chunk, pollution);
+        }
     }
 
     //Gets chunk pollution and if it isn't already set, creates with 0 pollution
@@ -48,11 +54,13 @@ public class ChunkHandler {
 
     public static void unloadChunk(Chunk chunk){
         chunkStorage.remove(chunk);
-        //pollutedChunkStorage.remove(chunk);
+        pollutedChunkStorage.remove(chunk);
     }
 
     //Tries to create new pollutedChunk (for use in pollution spreading)
     public static void newPollutedChunk(Chunk chunk, float pollution){
+        //Uses this function just in case it isn't generated yet
+        getPollution(chunk);
         if(pollutedChunkStorage.containsKey(chunk)){
             if(pollution > 50) {
                 pollutedChunkStorage.replace(chunk, pollution);

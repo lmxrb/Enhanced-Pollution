@@ -27,7 +27,6 @@ public class PollutionThread extends Thread {
     public void run() {
         while(!isInterrupted()){
             while(!Minecraft.getMinecraft().isGamePaused()) {
-
                 //System.gc();
                 try {
                     //Sleep every 2.5 seconds (Will be configurable and increased)
@@ -36,15 +35,10 @@ public class PollutionThread extends Thread {
                     //e.printStackTrace();
                 }
                 processTiles();
-                /*
-                t++;
-                if(t == 2){
-                    t = 0;
                     //RUN Pollution spreading once every 5 seconds
-                    if(!ChunkHandler.chunkStorage.isEmpty()) {
-                        PollutionSpreading.spreadPollution(world);
-                    }
-                }*/
+                if(!ChunkHandler.chunkStorage.isEmpty()) {
+                    ChunkHandler.pollutedChunkStorage.forEach((c,p) -> new PollutionSpread(world, c,p));
+                }
             }
         }
         interrupt();
@@ -58,10 +52,8 @@ public class PollutionThread extends Thread {
             if(pollution >= 0) {
                 Chunk tileChunk = tile.getWorldObj().getChunkFromBlockCoords(tile.xCoord, tile.zCoord);
                 ChunkHandler.changePollution(tileChunk, pollution);
-                //System.out.println("Pollution of this chunk: " + ChunkHandler.chunkStorage.get(tileChunk));
             }
         }
-        //TileUtils.clearTileCache();
     }
 
     //TODO: Add pollution based fog

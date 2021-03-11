@@ -37,7 +37,7 @@ public class PollutionThread extends Thread {
                 processTiles();
                     //RUN Pollution spreading once every 5 seconds
                 if(!ChunkHandler.chunkStorage.isEmpty()) {
-                    ChunkHandler.pollutedChunkStorage.forEach((c,p) -> new PollutionSpread(world, c,p));
+                    PollutionSpread.spreadAll(world, ChunkHandler.pollutedChunkStorage);
                 }
             }
         }

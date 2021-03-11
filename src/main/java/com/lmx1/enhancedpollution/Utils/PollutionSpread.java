@@ -25,14 +25,13 @@ public class PollutionSpread {
     }
 
     private static void processSpread(World w, Chunk chunk, double pollution){
-        System.out.println("here");
         adjacentChunks = Utils.getAdjacentPollutedChunks(w, chunk);
         spreadToNearby(chunk, pollution);
     }
 
     //Spreads pollution to one chunk
     private static void spread(Chunk chunk, double p){
-        double newPollution = adjacentPollution > 0 ? p / adjacentPollution * spread : spread / adjacentChunks.size();
+        double newPollution = Math.round(adjacentPollution > 0 ? p / adjacentPollution * spread : spread / adjacentChunks.size());
         ChunkHandler.changePollution(chunk, newPollution);
     }
 
@@ -45,7 +44,7 @@ public class PollutionSpread {
         double adjacentAverage = adjacentPollution > 0 ? adjacentPollution / adjacentChunks.size() : 0;
         spread = 0.1 * adjacentChunks.size() * pollution - adjacentAverage;
         adjacentChunks.forEach(PollutionSpread::spread);
-        ChunkHandler.changePollution(centerChunk, -spread);
+        ChunkHandler.changePollution(centerChunk, Math.round(-spread));
         adjacentPollution = 0;
     }
 

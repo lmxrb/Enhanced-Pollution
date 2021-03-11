@@ -8,7 +8,7 @@ public class PollutionFilterTile extends TileEntity  {
 
     private int ticks;
     //TODO: Add custom filters and passive/active filtering (fans)
-    public final float filteringCapacity = -125f;
+    public final double filteringCapacity = -125d;
 
     //should update because of blacklisted dimensions
 

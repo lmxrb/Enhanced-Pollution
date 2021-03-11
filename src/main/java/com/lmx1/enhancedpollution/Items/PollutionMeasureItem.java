@@ -23,8 +23,8 @@ public class PollutionMeasureItem extends Item {
         //Run only on server side
         if(!world.isRemote) {
             //Gets amount of pollution and prints it to chat
-            float pollution = ChunkHandler.getPollution(world.getChunkFromBlockCoords(x, z));
-            player.addChatMessage(new ChatComponentTranslation("Chunk's pollution: " + String.format("%.3f", pollution)));
+            double pollution = ChunkHandler.getPollution(world.getChunkFromBlockCoords(x, z));
+            player.addChatMessage(new ChatComponentTranslation("Chunk's pollution: " + pollution));
         }
         return true;
     }

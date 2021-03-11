@@ -4,45 +4,53 @@ import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
 public class PollutionSpread {
 
-    private static HashMap<Chunk, Float> adjacentChunks;
-    private static List<Chunk> toRemove = new ArrayList<>();
-    private static float adjacentPollution = 0;
-    private static float spread = 0;
+    private static HashMap<Chunk, Double> adjacentChunks;
+    private static final List<Chunk> toRemove = new ArrayList<>();
+    private static double adjacentPollution = 0;
+    private static double spread = 0;
 
-    public static void spreadAll(World w, HashMap<Chunk, Float> chunkStorage){
-        chunkStorage.forEach((c,p) -> processSpread(w, c,p));
+    public static void spreadAll(World w, HashMap<Chunk, Double> storage){
+        try{
+            storage.forEach((c, p) -> processSpread(w, c,p));
+        }
+        catch(ConcurrentModificationException e){
+            e.printStackTrace();
+        }
     }
 
-    private static void processSpread(World w, Chunk chunk, float pollution){
+    private static void processSpread(World w, Chunk chunk, double pollution){
+        System.out.println("here");
         adjacentChunks = Utils.getAdjacentPollutedChunks(w, chunk);
         spreadToNearby(chunk, pollution);
     }
 
     //Spreads pollution to one chunk
-    private static void spread(Chunk chunk, Float p){
-        float newPollution = (1 - p/ adjacentPollution) * spread;
+    private static void spread(Chunk chunk, double p){
+        double newPollution = adjacentPollution > 0 ? p / adjacentPollution * spread : spread / adjacentChunks.size();
         ChunkHandler.changePollution(chunk, newPollution);
     }
 
     //Spreads pollution to adjacent chunks
-    private static void spreadToNearby(Chunk centerChunk, float pollution){
+    private static void spreadToNearby(Chunk centerChunk, double pollution){
         //Refactor
         if(pollution < 50){ return; }
         adjacentChunks.forEach((c, p) -> calcPol(c, pollution, p));
         toRemove.forEach(c -> adjacentChunks.remove(c));
-        spread = (float) 0.2 * adjacentChunks.size() * pollution - adjacentPollution / adjacentChunks.size() + 1;
+        double adjacentAverage = adjacentPollution > 0 ? adjacentPollution / adjacentChunks.size() : 0;
+        spread = 0.1 * adjacentChunks.size() * pollution - adjacentAverage;
         adjacentChunks.forEach(PollutionSpread::spread);
-        ChunkHandler.changePollution(centerChunk, pollution - spread);
+        ChunkHandler.changePollution(centerChunk, -spread);
         adjacentPollution = 0;
     }
 
     //Calculates amount of pollution on adjacent chunks
-    private static void calcPol(Chunk chunk, float main, float pollution){
+    private static void calcPol(Chunk chunk, double main, double pollution){
         if(pollution < main){
             adjacentPollution += pollution;
         }

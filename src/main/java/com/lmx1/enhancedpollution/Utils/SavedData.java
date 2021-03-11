@@ -28,7 +28,7 @@ public class SavedData extends WorldSavedData{
         return new SavedData(world);
     }
 
-    public void addPollution(float pollution, int xCoord, int zCoord){
+    public void addPollution(double pollution, int xCoord, int zCoord){
         //add Pollution
         //convert coords to chunks
         //world.mapStorage.setData();

@@ -19,8 +19,8 @@ public class Utils {
         return chunkList;
     }
 
-    public static HashMap<Chunk, Float> getAdjacentPollutedChunks(World world, Chunk centerChunk){
-        HashMap<Chunk, Float> map = new HashMap<>();
+    public static HashMap<Chunk, Double> getAdjacentPollutedChunks(World world, Chunk centerChunk){
+        HashMap<Chunk, Double> map = new HashMap<>();
         for (Chunk chunk: getAdjacentChunks(world, centerChunk)) {
             map.put(chunk, ChunkHandler.getPollution(chunk));
         }

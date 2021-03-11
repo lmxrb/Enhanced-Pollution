@@ -72,7 +72,7 @@ public class EventHandler {
     @SubscribeEvent
     public void onChunkSaveEvent(ChunkDataEvent.Save event)
     {
-        event.getData().setFloat("pollution", ChunkHandler.saveChunk(event.getChunk(), event.getData()).getFloat("pollution"));
+        event.getData().setDouble("pollution", ChunkHandler.saveChunk(event.getChunk(), event.getData()).getDouble("pollution"));
     }
 
     @SubscribeEvent

@@ -35,8 +35,9 @@ public class PollutionThread extends Thread {
                     //e.printStackTrace();
                 }
                 processTiles();
-                    //RUN Pollution spreading once every 5 seconds
-                if(!ChunkHandler.chunkStorage.isEmpty()) {
+                t++;
+                if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
+                    t = 0;
                     PollutionSpread.spreadAll(world, ChunkHandler.pollutedChunkStorage);
                 }
             }
@@ -48,7 +49,7 @@ public class PollutionThread extends Thread {
     private void processTiles(){
         for(Object obj : world.loadedTileEntityList){
             TileEntity tile = (TileEntity) obj;
-            float pollution = TileUtils.getPollution(tile);
+            double pollution = TileUtils.getPollution(tile);
             if(pollution >= 0) {
                 Chunk tileChunk = tile.getWorldObj().getChunkFromBlockCoords(tile.xCoord, tile.zCoord);
                 ChunkHandler.changePollution(tileChunk, pollution);

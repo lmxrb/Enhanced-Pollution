@@ -8,48 +8,48 @@ import java.util.HashMap;
 public class ChunkHandler {
 
     //Is this the more efficient way of storing the chunks?
-    public static HashMap<Chunk, Float> chunkStorage = new HashMap<>();
-    public static HashMap<Chunk, Float> pollutedChunkStorage = new HashMap<>();
+    public static HashMap<Chunk, Double> chunkStorage = new HashMap<>();
+    public static HashMap<Chunk, Double> pollutedChunkStorage = new HashMap<>();
 
     //Loads chunk pollution data and saves to chunkStorage
     public static void loadChunk(Chunk chunk, NBTTagCompound data){
-        float pollution = data.getFloat("pollution");
+        double pollution = data.getDouble("pollution");
         chunkStorage.put(chunk, pollution);
     }
 
     //Saves pollution saved in chunkStorage to chunk data
     public static NBTTagCompound saveChunk(Chunk chunk, NBTTagCompound data){
-        float pollution = 0;
+        double pollution = 0;
         if(chunkStorage.containsKey(chunk)) {
             pollution = chunkStorage.get(chunk);
         }
-        data.setFloat("pollution", pollution);
+        data.setDouble("pollution", pollution);
         return data;
     }
 
     //Changes chunk pollution
-    public static void changePollution(Chunk chunk, float newPollution){
+    public static void changePollution(Chunk chunk, double newPollution){
         if(!chunkStorage.containsKey(chunk)){
             chunkStorage.put(chunk, newPollution);
         }
         else{
-            float pollution = chunkStorage.get(chunk) + newPollution;
+            double pollution = chunkStorage.get(chunk) + newPollution;
             newPollutedChunk(chunk, pollution);
             chunkStorage.replace(chunk, pollution);
         }
     }
 
     //Gets chunk pollution and if it isn't already set, creates with 0 pollution
-    public static float getPollution(Chunk chunk){
+    public static double getPollution(Chunk chunk){
         if(!chunkStorage.containsKey(chunk)){
-            chunkStorage.put(chunk, 0f);
+            chunkStorage.put(chunk, 0D);
         }
         return chunkStorage.get(chunk);
     }
 
     //Delete pollution (used by machines), makes pollution 0 (doesn't remove it from storage)
     public static void deletePollution(Chunk chunk){
-        chunkStorage.replace(chunk, 0f);
+        chunkStorage.replace(chunk, 0D);
     }
 
     public static void unloadChunk(Chunk chunk){
@@ -58,7 +58,7 @@ public class ChunkHandler {
     }
 
     //Tries to create new pollutedChunk (for use in pollution spreading)
-    public static void newPollutedChunk(Chunk chunk, float pollution){
+    public static void newPollutedChunk(Chunk chunk, double pollution){
         //Uses this function just in case it isn't generated yet
         getPollution(chunk);
         if(pollutedChunkStorage.containsKey(chunk)){

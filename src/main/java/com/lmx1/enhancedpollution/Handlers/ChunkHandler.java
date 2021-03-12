@@ -9,7 +9,7 @@ public class ChunkHandler {
 
     //Is this the more efficient way of storing the chunks?
     public static HashMap<Chunk, Double> chunkStorage = new HashMap<>();
-    public static HashMap<Chunk, Double> pollutedChunkStorage = new HashMap<>();
+    public static HashMap<Chunk, Double> heavyPollutedChunkStorage = new HashMap<>();
 
     //Loads chunk pollution data and saves to chunkStorage
     public static void loadChunk(Chunk chunk, NBTTagCompound data){
@@ -19,7 +19,7 @@ public class ChunkHandler {
 
     //Saves pollution saved in chunkStorage to chunk data
     public static NBTTagCompound saveChunk(Chunk chunk, NBTTagCompound data){
-        double pollution = 0;
+        double pollution = 0D;
         if(chunkStorage.containsKey(chunk)) {
             pollution = chunkStorage.get(chunk);
         }
@@ -55,23 +55,23 @@ public class ChunkHandler {
 
     public static void unloadChunk(Chunk chunk){
         chunkStorage.remove(chunk);
-        pollutedChunkStorage.remove(chunk);
+        heavyPollutedChunkStorage.remove(chunk);
     }
 
     //Tries to create new pollutedChunk (for use in pollution spreading)
     public static void newPollutedChunk(Chunk chunk, double pollution){
         //Uses this function just in case it isn't generated yet
         //getPollution(chunk);
-        if(pollutedChunkStorage.containsKey(chunk)){
-            if(pollution >= 50) {
-                pollutedChunkStorage.replace(chunk, pollution);
+        if(heavyPollutedChunkStorage.containsKey(chunk)){
+            if(pollution >= 12000) {
+                heavyPollutedChunkStorage.replace(chunk, pollution);
             }
             else{
-                pollutedChunkStorage.remove(chunk);
+                heavyPollutedChunkStorage.remove(chunk);
             }
         }
-        else if(pollution >= 50 && chunk.isChunkLoaded){
-            pollutedChunkStorage.put(chunk, pollution);
+        else if(pollution >= 12000 && chunk.isChunkLoaded){
+            heavyPollutedChunkStorage.put(chunk, pollution);
         }
     }
 }

@@ -1,26 +1,28 @@
 package com.lmx1.enhancedpollution.Utils;
 
-import com.lmx1.enhancedpollution.Integration.IE.IEMultiBlockIntegration;
+import com.lmx1.enhancedpollution.Integration.EnderIOPollution;
+import cpw.mods.fml.common.Loader;
+import crazypants.enderio.machine.AbstractMachineEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TileUtils {
 
-    //public List<TileEntity> masters = new ArrayList<TileEntity>();
-
     //Returns amount of pollution that Tile produces
     public static double getPollution(TileEntity tile){
-        //System.out.println(tile.getClass().getName());
         if(tile instanceof TileEntityFurnace){
-            return ((TileEntityFurnace) tile).isBurning() ? 50d : 0.0d;
+            return ((TileEntityFurnace) tile).isBurning() ? 2.5d : 0;
         }
-        /*if(tile.getClass().getName().startsWith("blusunrize.immersiveengineering.common")){
-            return IEMultiBlockIntegration.getPollution(tile);
-        }*/
+        if(Loader.isModLoaded("EnderIO")){
+            if(tile instanceof AbstractMachineEntity) {
+                return EnderIOPollution.getPollution(tile);
+            }
+        }
         return 0;
     }
 
+    /*
     public static void clearTileCache(){
 
-    }
+    }*/
 }

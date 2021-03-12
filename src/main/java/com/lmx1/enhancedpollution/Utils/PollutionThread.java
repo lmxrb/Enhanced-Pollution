@@ -36,10 +36,12 @@ public class PollutionThread extends Thread {
                 }
                 processTiles();
                 t++;
-                if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
+                //Could possibly be a mistake and supposed to use heavyPollutedChunkStorage instead
+                /*if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
                     t = 0;
-                    PollutionSpread.spreadAll(world, ChunkHandler.pollutedChunkStorage);
-                }
+                    PollutionSpread.spreadAll(world, ChunkHandler.heavyPollutedChunkStorage);
+                    PollutionSpread.toIgnore.clear();
+                }*/
             }
         }
         interrupt();
@@ -50,7 +52,7 @@ public class PollutionThread extends Thread {
         for(Object obj : world.loadedTileEntityList){
             TileEntity tile = (TileEntity) obj;
             double pollution = TileUtils.getPollution(tile);
-            if(pollution >= 0) {
+            if(pollution > 0) {
                 Chunk tileChunk = tile.getWorldObj().getChunkFromBlockCoords(tile.xCoord, tile.zCoord);
                 ChunkHandler.changePollution(tileChunk, pollution);
             }

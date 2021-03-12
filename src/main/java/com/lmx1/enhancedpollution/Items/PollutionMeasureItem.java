@@ -1,6 +1,7 @@
 package com.lmx1.enhancedpollution.Items;
 
 import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
+import com.lmx1.enhancedpollution.Utils.PollutionSpread;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

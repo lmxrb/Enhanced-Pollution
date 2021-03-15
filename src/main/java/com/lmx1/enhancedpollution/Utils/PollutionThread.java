@@ -1,10 +1,14 @@
 package com.lmx1.enhancedpollution.Utils;
 
 import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
+import com.lmx1.enhancedpollution.Handlers.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PollutionThread extends Thread {
 
@@ -18,7 +22,7 @@ public class PollutionThread extends Thread {
         this.world = w;
         this.setDaemon(true);
         this.setPriority(3);
-        //regularFog(world.getWorldTime());
+        regularFog(world.getWorldTime());
         handler = SavedData.getHandler(world);
         //UPDATE INFO
     }
@@ -40,7 +44,7 @@ public class PollutionThread extends Thread {
                 if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
                     t = 0;
                     PollutionSpread.spreadAll(world, ChunkHandler.heavyPollutedChunkStorage);
-                    PollutionSpread.toIgnore.clear();
+                    //PollutionSpread.toIgnore.clear();
                 }
             }
         }
@@ -54,19 +58,18 @@ public class PollutionThread extends Thread {
             double pollution = TileUtils.getPollution(tile);
             if(pollution > 0) {
                 Chunk tileChunk = tile.getWorldObj().getChunkFromBlockCoords(tile.xCoord, tile.zCoord);
-                ChunkHandler.changePollution(tileChunk, pollution);
+                ChunkHandler.addPollution(tileChunk, pollution);
             }
         }
     }
 
-    //TODO: Add pollution based fog
-    /*void processFog(float r, float g, float b, float d){
-        List<Float> fog = new ArrayList<Float>();
+    void processFog(float r, float g, float b, float d){
+        List<Float> fog = new ArrayList<>();
         fog.add(r);
         fog.add(g);
         fog.add(b);
         fog.add(d);
-        MyEventHandler.fog = fog;
+        EventHandler.fog = fog;
     }
 
     void regularFog(long l){
@@ -75,6 +78,6 @@ public class PollutionThread extends Thread {
         } else {
             processFog(75, 89, 110, 0.001f);
         }
-    }*/
+    }
 
 }

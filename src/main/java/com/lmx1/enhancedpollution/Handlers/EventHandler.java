@@ -1,7 +1,9 @@
 package com.lmx1.enhancedpollution.Handlers;
 
 import com.lmx1.enhancedpollution.Utils.PollutionThread;
+import com.lmx1.enhancedpollution.Utils.Utils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -18,27 +20,39 @@ public class EventHandler {
 
     public static List<Thread> threads = new ArrayList<Thread>();
 
-    /*public static List<Float> fog = new ArrayList<Float>();
+    public static List<Float> fog = new ArrayList<>();
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void fogColor(EntityViewRenderEvent.FogColors event)
     {
-        if(!Minecraft.getMinecraft().thePlayer.isPotionActive(Potion.blindness))
-        {
-            event.red = fog.get(0)/255f;
-            event.green = fog.get(1)/255f;
-            event.blue = fog.get(2)/255f;
+        if(!Minecraft.getMinecraft().thePlayer.isPotionActive(Potion.blindness)) {
+            try {
+                event.red = fog.get(0) / 255f;
+                event.green = fog.get(1) / 255f;
+                event.blue = fog.get(2) / 255f;
+            }
+            catch(IndexOutOfBoundsException e){
+            }
         }
+
     }
 
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void fogDensity(EntityViewRenderEvent.FogDensity event) {
-        event.density = fog.get(3);
-        event.setCanceled(true);
-    }*/
+        //Could probably use nearby chunks pollution to make it more smooth
+        float pollution = (float) Utils.getEntityChunkPollution(event.entity);
+        try {
+            float density = fog.get(3) * (1 + pollution / 200000);
+            event.density = density;
+            event.setCanceled(true);
+        }
+        catch(IndexOutOfBoundsException e){
+            event.setCanceled(false);
+        }
+    }
 
     //When world loads creates a new Pollution Thread
     @SubscribeEvent
@@ -85,6 +99,11 @@ public class EventHandler {
     public void onChunkUnload(ChunkDataEvent.Unload event)
     {
         ChunkHandler.unloadChunk(event.getChunk());
+    }
+
+    @SubscribeEvent
+    public void playerTickEvent(TickEvent.PlayerTickEvent event) {
+
     }
 
 }

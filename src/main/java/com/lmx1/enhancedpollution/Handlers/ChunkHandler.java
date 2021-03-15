@@ -14,7 +14,9 @@ public class ChunkHandler {
     //Loads chunk pollution data and saves to chunkStorage
     public static void loadChunk(Chunk chunk, NBTTagCompound data){
         double pollution = data.getDouble("pollution");
-        chunkStorage.put(chunk, pollution);
+        changePollution(chunk, pollution);
+        /*chunkStorage.put(chunk, pollution);
+        newHeavyPollutedChunk(chunk, pollution);*/
     }
 
     //Saves pollution saved in chunkStorage to chunk data
@@ -28,16 +30,22 @@ public class ChunkHandler {
     }
 
     //Changes chunk pollution
-    public static void changePollution(Chunk chunk, double newPollution){
+    public static void addPollution(Chunk chunk, double newPollution){
+        if(chunkStorage.containsKey(chunk)) {
+            changePollution(chunk, chunkStorage.get(chunk) + newPollution);
+        } else {
+            changePollution(chunk, newPollution);
+        }
+    }
+
+    public static void changePollution(Chunk chunk, double pollution){
         if(!chunkStorage.containsKey(chunk)){
-            chunkStorage.put(chunk, newPollution);
-            newPollutedChunk(chunk, newPollution);
+            chunkStorage.put(chunk, pollution);
         }
         else{
-            double pollution = chunkStorage.get(chunk) + newPollution;
-            newPollutedChunk(chunk, pollution);
             chunkStorage.replace(chunk, pollution);
         }
+        newHeavyPollutedChunk(chunk, pollution);
     }
 
     //Gets chunk pollution and if it isn't already set, creates with 0 pollution
@@ -59,7 +67,7 @@ public class ChunkHandler {
     }
 
     //Tries to create new pollutedChunk (for use in pollution spreading)
-    public static void newPollutedChunk(Chunk chunk, double pollution){
+    public static void newHeavyPollutedChunk(Chunk chunk, double pollution){
         //Uses this function just in case it isn't generated yet
         //getPollution(chunk);
         if(heavyPollutedChunkStorage.containsKey(chunk)){

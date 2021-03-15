@@ -2,6 +2,7 @@ package com.lmx1.enhancedpollution.Utils;
 
 import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
 import com.lmx1.enhancedpollution.Handlers.EventHandler;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -26,6 +27,20 @@ public class Utils {
             map.put(chunk, ChunkHandler.getPollution(chunk));
         }
         return map;
+    }
+
+    public static double getEntityChunkPollution(Entity entity){
+        //World world = entity.worldObj;
+        //Needs to happen through a packet
+        World world = ((PollutionThread) EventHandler.threads.iterator().next()).world;
+        Chunk chunk = world.getChunkFromChunkCoords(entity.chunkCoordX, entity.chunkCoordZ);
+        try {
+            double pollution = ChunkHandler.chunkStorage.get(chunk);
+            return pollution;
+        }
+        catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     public static PollutionThread findThread(World w){

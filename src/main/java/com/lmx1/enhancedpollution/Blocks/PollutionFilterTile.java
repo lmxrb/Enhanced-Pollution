@@ -32,7 +32,7 @@ public class PollutionFilterTile extends TileEntity  {
         if (ChunkHandler.getPollution(chunk) <= -filteringCapacity) {
             ChunkHandler.deletePollution(chunk);
         } else {
-            ChunkHandler.changePollution(chunk, filteringCapacity);
+            ChunkHandler.addPollution(chunk, filteringCapacity);
         }
     }
 

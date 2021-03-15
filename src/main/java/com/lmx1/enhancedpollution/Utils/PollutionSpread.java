@@ -24,7 +24,7 @@ public class PollutionSpread {
             heavyPollutedStorage.forEach((c, p) -> processSpread(w, c,p));
         }
         catch(ConcurrentModificationException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -53,7 +53,9 @@ public class PollutionSpread {
         else{
             newPollution = spread / adjacentChunks.size();
         }
-        ChunkHandler.changePollution(chunk, p + Math.round(0.75 * newPollution));
+        if(ChunkHandler.getPollution(chunk) < 12000) {
+            ChunkHandler.addPollution(chunk, p + Math.round(0.75 * newPollution));
+        }
     }
 
     //Spreads pollution to adjacent chunks
@@ -65,8 +67,7 @@ public class PollutionSpread {
         double adjacentAverage = adjacentPollution > 0 && adjacentPollution < pollution ? adjacentPollution / adjacentChunks.size() : 0;
         spread = Math.round(0.0125 * adjacentChunks.size() * (pollution-12000) - adjacentAverage);
         adjacentChunks.forEach(PollutionSpread::spread);
-        System.out.println("spread: " + spread);
-        ChunkHandler.changePollution(centerChunk, -spread);
+        ChunkHandler.addPollution(centerChunk, -spread * 1.1);
         adjacentPollution = 0;
     }
 

@@ -12,7 +12,6 @@ public class PollutionSpread {
 
     private static HashMap<Chunk, Double> adjacentChunks;
     private static HashMap<Chunk, Double> heavyPollutedStorage;
-    private static final List<Chunk> toRemove = new ArrayList<>();
     public static final List<Chunk> toIgnore = new ArrayList<>();
     private static double adjacentPollution = 0;
     private static double spread = 0;
@@ -38,6 +37,7 @@ public class PollutionSpread {
 
     //Spreads pollution to one chunk (of the adjacent ones)
     private static void spread(Chunk chunk, double p){
+        if(toIgnore.contains(chunk)){return;}
         double newPollution;
         if(heavyPollutedStorage.containsKey(chunk)){
             toIgnore.add(chunk);
@@ -53,7 +53,7 @@ public class PollutionSpread {
         else{
             newPollution = spread / adjacentChunks.size();
         }
-        ChunkHandler.changePollution(chunk, p + Math.round(newPollution));
+        ChunkHandler.changePollution(chunk, p + Math.round(0.75 * newPollution));
     }
 
     //Spreads pollution to adjacent chunks
@@ -61,7 +61,7 @@ public class PollutionSpread {
         //Refactor
         if(pollution < 12000){ return; }
         adjacentChunks.forEach((c, p) -> calcPol(c, pollution, p));
-        toRemove.forEach(c -> adjacentChunks.remove(c));
+        toIgnore.forEach(c -> adjacentChunks.remove(c));
         double adjacentAverage = adjacentPollution > 0 && adjacentPollution < pollution ? adjacentPollution / adjacentChunks.size() : 0;
         spread = Math.round(0.0125 * adjacentChunks.size() * (pollution-12000) - adjacentAverage);
         adjacentChunks.forEach(PollutionSpread::spread);
@@ -76,7 +76,7 @@ public class PollutionSpread {
             adjacentPollution += pollution;
         }
         else{
-            toRemove.add(chunk);
+            toIgnore.add(chunk);
         }
     }
 }

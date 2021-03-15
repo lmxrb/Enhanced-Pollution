@@ -37,11 +37,11 @@ public class PollutionThread extends Thread {
                 processTiles();
                 t++;
                 //Could possibly be a mistake and supposed to use heavyPollutedChunkStorage instead
-                /*if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
+                if(t == 2 && !ChunkHandler.chunkStorage.isEmpty()) {
                     t = 0;
                     PollutionSpread.spreadAll(world, ChunkHandler.heavyPollutedChunkStorage);
                     PollutionSpread.toIgnore.clear();
-                }*/
+                }
             }
         }
         interrupt();

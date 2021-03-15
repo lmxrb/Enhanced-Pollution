@@ -1,6 +1,7 @@
 package com.lmx1.enhancedpollution.Utils;
 
 import com.lmx1.enhancedpollution.Handlers.ChunkHandler;
+import com.lmx1.enhancedpollution.Handlers.EventHandler;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -25,5 +26,21 @@ public class Utils {
             map.put(chunk, ChunkHandler.getPollution(chunk));
         }
         return map;
+    }
+
+    public static PollutionThread findThread(World w){
+        for(Thread thread : EventHandler.threads){
+            //Always true, but letting it be for now
+            try{
+                PollutionThread t = (PollutionThread) thread;
+                if(t.world == w){
+                    return t;
+                }
+            }
+            catch(ClassCastException e){
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
